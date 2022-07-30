@@ -1,78 +1,69 @@
-use std::{thread, time};
+use std::rc::Rc;
 
-const VENDOR_ID: u16 = 0x046d;
-const PRODUCT_ID: u16 = 0xc900;
-const LIGHT_ON: u8 = 0x01;
-const LIGHT_OFF: u8 = 0x00;
-const MIN_BRIGHTNESS: u8 = 0x14;
-const MAX_BRIGHTNESS: u8 = 0xfa;
-const ONE_SECOND: time::Duration = time::Duration::from_secs(1);
+use gtk::{prelude::*, ToggleButton};
+use gtk::{Application, ApplicationWindow};
+use hidapi::HidDevice;
+
+const APP_ID: &str = "com.github.ccouzens.litra-glow-gtk";
 
 fn main() {
-    let api = hidapi::HidApi::new().unwrap();
+    // Create a new application
+    let app = Application::builder().application_id(APP_ID).build();
 
-    let device = api.open(VENDOR_ID, PRODUCT_ID).unwrap();
+    // Connect to "activate" signal of `app`
+    app.connect_activate(build_ui());
 
-    device
-        .write(&[
-            0x11, 0xff, 0x04, 0x1c, LIGHT_ON, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        ])
-        .unwrap();
-    println!("Light on!");
+    // Run the application
+    app.run();
+}
 
-    thread::sleep(ONE_SECOND);
+fn build_ui() -> impl Fn(&Application) {
+    |app: &Application| {
+        let api = hidapi::HidApi::new().unwrap();
 
-    for temp in (2700..=6500u16).step_by(100) {
-        device
-            .write(&[
-                0x11,
-                0xff,
-                0x04,
-                0x9c,
-                (((temp >> 8) & 0xFF) as u8),
-                ((temp & 0xFF) as u8),
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-                0x00,
-            ])
-            .unwrap();
+        let device = Rc::new(api.open(0x046d, 0xc900).unwrap());
+        let button = ToggleButton::builder()
+            .label("Light")
+            .margin_top(12)
+            .margin_bottom(12)
+            .margin_start(12)
+            .margin_end(12)
+            .build();
 
-        println!("Temperature {temp}° K");
-        thread::sleep(time::Duration::from_millis(100));
+        button.connect_toggled(move |button| {
+            device
+                .write(&[
+                    0x11,
+                    0xff,
+                    0x04,
+                    0x1a,
+                    if button.is_active() { 1 } else { 0 },
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                    00,
+                ])
+                .unwrap();
+        });
+
+        let window = ApplicationWindow::builder()
+            .application(app)
+            .title("Litra Glow Control")
+            .child(&button)
+            .build();
+
+        // Present window
+        window.present();
     }
-
-    thread::sleep(ONE_SECOND);
-
-    for brightness in MIN_BRIGHTNESS..=MAX_BRIGHTNESS {
-        device
-            .write(&[
-                0x11, 0xff, 0x04, 0x4c, 0x00, brightness, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            ])
-            .unwrap();
-        println!("Brightness {brightness}");
-        thread::sleep(time::Duration::from_millis(20));
-    }
-
-    thread::sleep(ONE_SECOND);
-
-    device
-        .write(&[
-            0x11, 0xff, 0x04, 0x1c, LIGHT_OFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        ])
-        .unwrap();
-    println!("Light off!");
 }
