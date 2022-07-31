@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<cambalache-project version="0.10.3" target_tk="gtk-4.0">
+  <ui>
+	(1,None,"com.github.ccouzens.litra_glow_gtk.ui","com.github.ccouzens.litra_glow_gtk.ui",None,None,None,None,None,None)
+  </ui>
+  <object>
+	(1,9,"GtkApplicationWindow","window",None,None,None,None,None),
+	(1,10,"GtkBox",None,9,None,None,None,None),
+	(1,11,"GtkGrid",None,10,None,None,None,None),
+	(1,12,"GtkLabel",None,11,None,None,None,None),
+	(1,13,"GtkScale","brightness-scale",11,None,None,None,1),
+	(1,14,"GtkScale","colour-scale",11,None,None,None,2),
+	(1,15,"GtkLabel",None,11,None,None,None,3),
+	(1,16,"GtkToggleButton","light-toggle",10,None,None,None,1)
+  </object>
+  <object_property>
+	(1,9,"GtkWidget","height-request","250",None,None,None,None,None),
+	(1,9,"GtkWidget","width-request","300",None,None,None,None,None),
+	(1,9,"GtkWindow","default-height","300",None,None,None,None,None),
+	(1,9,"GtkWindow","default-width","450",None,None,None,None,None),
+	(1,9,"GtkWindow","title","Litra Glow",None,None,None,None,None),
+	(1,10,"GtkBox","spacing","12",None,None,None,None,None),
+	(1,10,"GtkWidget","margin-bottom","12",None,None,None,None,None),
+	(1,10,"GtkWidget","margin-end","12",None,None,None,None,None),
+	(1,10,"GtkWidget","margin-start","12",None,None,None,None,None),
+	(1,10,"GtkWidget","margin-top","12",None,None,None,None,None),
+	(1,11,"GtkGrid","column-homogeneous","True",None,None,None,None,None),
+	(1,11,"GtkGrid","column-spacing","12",None,None,None,None,None),
+	(1,11,"GtkGrid","row-spacing","12",None,None,None,None,None),
+	(1,12,"GtkLabel","label","Brightness",None,None,None,None,None),
+	(1,13,"GtkOrientable","orientation","vertical",None,None,None,None,None),
+	(1,13,"GtkWidget","hexpand","True",None,None,None,None,None),
+	(1,13,"GtkWidget","vexpand","True",None,None,None,None,None),
+	(1,14,"GtkOrientable","orientation","vertical",None,None,None,None,None),
+	(1,14,"GtkWidget","hexpand","True",None,None,None,None,None),
+	(1,14,"GtkWidget","vexpand","True",None,None,None,None,None),
+	(1,15,"GtkLabel","label","Colour",None,None,None,None,None),
+	(1,16,"GtkButton","label","Light",None,None,None,None,None),
+	(1,16,"GtkWidget","hexpand","True",None,None,None,None,None),
+	(1,16,"GtkWidget","vexpand","True",None,None,None,None,None)
+  </object_property>
+  <object_layout_property>
+	(1,11,12,"GtkGridLayoutChild","column","0",None,None,None,None),
+	(1,11,12,"GtkGridLayoutChild","column-span","1",None,None,None,None),
+	(1,11,12,"GtkGridLayoutChild","row","1",None,None,None,None),
+	(1,11,12,"GtkGridLayoutChild","row-span","1",None,None,None,None),
+	(1,11,13,"GtkGridLayoutChild","column","0",None,None,None,None),
+	(1,11,13,"GtkGridLayoutChild","column-span","1",None,None,None,None),
+	(1,11,13,"GtkGridLayoutChild","row","0",None,None,None,None),
+	(1,11,13,"GtkGridLayoutChild","row-span","1",None,None,None,None),
+	(1,11,14,"GtkGridLayoutChild","column","1",None,None,None,None),
+	(1,11,14,"GtkGridLayoutChild","column-span","1",None,None,None,None),
+	(1,11,14,"GtkGridLayoutChild","row","0",None,None,None,None),
+	(1,11,14,"GtkGridLayoutChild","row-span","1",None,None,None,None),
+	(1,11,15,"GtkGridLayoutChild","column","1",None,None,None,None),
+	(1,11,15,"GtkGridLayoutChild","column-span","1",None,None,None,None),
+	(1,11,15,"GtkGridLayoutChild","row","1",None,None,None,None),
+	(1,11,15,"GtkGridLayoutChild","row-span","1",None,None,None,None)
+  </object_layout_property>
+</cambalache-project>
