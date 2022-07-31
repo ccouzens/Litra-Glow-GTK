@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.10.3 -->
+<interface>
+  <!-- interface-name com.github.ccouzens.litra_glow_gtk.ui -->
+  <requires lib="gtk" version="4.6"/>
+  <object class="GtkApplicationWindow" id="window">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkGrid">
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Brightness</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">1</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale" id="brightness-scale">
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">1</property>
+                  <property name="row">0</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScale" id="colour-scale">
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">0</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Colour</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="column-span">1</property>
+                  <property name="row">1</property>
+                  <property name="row-span">1</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="light-toggle">
+            <property name="hexpand">True</property>
+            <property name="label">Light</property>
+            <property name="vexpand">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
