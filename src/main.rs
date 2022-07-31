@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use gtk::{prelude::*, ToggleButton, Builder, Application, ApplicationWindow};
+use gtk::{glib::clone, prelude::*, Application, ApplicationWindow, Builder, Scale, ToggleButton};
 use hidapi::HidDevice;
 
 const APP_ID: &str = "com.github.ccouzens.litra-glow-gtk";
@@ -18,8 +18,13 @@ fn build_ui(device: Rc<HidDevice>, app: &Application) {
     let builder = Builder::from_string(include_str!("../com.github.ccouzens.litra_glow_gtk.ui"));
     let button: ToggleButton = builder.object("light-toggle").expect("Couldn't get toggle");
     let window: ApplicationWindow = builder.object("window").expect("Couldn't get window");
+    let brigthness_scale: Scale = builder
+        .object("brightness-scale")
+        .expect("Couldn't get brigthness scale");
+    brigthness_scale.set_range(20.0, 250.0);
+    brigthness_scale.set_increments(1.0, 230.0 / 5.0);
 
-    button.connect_toggled(move |button| {
+    button.connect_toggled(clone!(@strong device => move |button| {
         device
             .write(&[
                 0x11,
@@ -28,6 +33,33 @@ fn build_ui(device: Rc<HidDevice>, app: &Application) {
                 0x1a,
                 if button.is_active() { 1 } else { 0 },
                 00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+                00,
+            ])
+            .unwrap();
+    }));
+
+    brigthness_scale.connect_value_changed(move |scale| {
+        device
+            .write(&[
+                0x11,
+                0xff,
+                0x04,
+                0x4d,
+                00,
+                scale.value() as u8,
                 00,
                 00,
                 00,
