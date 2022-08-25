@@ -27,8 +27,9 @@ fn build_ui(device: Rc<HidDevice>, app: &Application) {
     let colour_scale: Scale = builder
         .object("colour-scale")
         .expect("Couldn't get colour scale");
-    colour_scale.set_range(-6500.0, -2700.0);
-    colour_scale.set_increments(100.0, 800.0);
+    colour_scale.set_range(-65.0, -27.0);
+    colour_scale.set_increments(1.0, 8.0);
+    colour_scale.set_round_digits(0);
 
     button.connect_toggled(clone!(@strong device => move |button| {
         device
@@ -85,7 +86,7 @@ fn build_ui(device: Rc<HidDevice>, app: &Application) {
     }));
 
     colour_scale.connect_value_changed(move |scale| {
-        let value = -scale.value() as u16;
+        let value = -scale.value() as u16 * 100;
         device
             .write(&[
                 0x11,
