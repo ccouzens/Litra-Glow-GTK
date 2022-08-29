@@ -1,4 +1,4 @@
-use std::{io, num::ParseIntError};
+use std::io;
 
 const VENDOR_ID: u16 = 0x046d;
 const PRODUCT_ID: u16 = 0xc900;
@@ -10,8 +10,10 @@ use thiserror::Error;
 pub enum ReadEvaluatePrintError {
     #[error("reading from stdin")]
     Stdin(#[from] io::Error),
+    #[error("odd digits on stdin")]
+    OddDigits,
     #[error("parsing from hex")]
-    Parse(#[from] ParseIntError),
+    Parse,
     #[error("writing to device")]
     Write(HidError),
     #[error("reading from device")]
@@ -22,10 +24,17 @@ fn read_evaluate_print(
     line: std::io::Result<String>,
     device: &HidDevice,
 ) -> Result<(), ReadEvaluatePrintError> {
-    let send_buf = line?
-        .split(":")
-        .map(|hex| u8::from_str_radix(hex, 16))
-        .collect::<Result<Vec<u8>, _>>()?;
+    let line = line?;
+    let mut send_buf = Vec::new();
+    let mut send_iter = line.bytes().filter(|c| c.is_ascii_hexdigit());
+    while let Some(d1) = send_iter.next() {
+        let d2 = send_iter.next().ok_or(ReadEvaluatePrintError::OddDigits)?;
+        send_buf.push(
+            (char::to_digit(d1 as char, 16).ok_or(ReadEvaluatePrintError::Parse)? * 16
+                + char::to_digit(d2 as char, 16).ok_or(ReadEvaluatePrintError::Parse)?)
+                as u8,
+        );
+    }
     device
         .write(&send_buf)
         .map_err(ReadEvaluatePrintError::Read)?;
